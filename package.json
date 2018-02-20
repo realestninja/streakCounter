@@ -1,5 +1,5 @@
 {
-  "name": "boilerplate",
+  "name": "nofap",
   "version": "0.0.0",
   "description": "basic",
   "main": "main.ts",
@@ -9,9 +9,14 @@
   "author": "nikhil",
   "license": "BSD-2-Clause",
   "dependencies": {
+    "jsonfile": "^4.0.0",
+    "node-datetime": "^2.0.6",
     "node-telegram-bot-api": "~0.23.3",
     "process": "^0.11.10",
     "ts-node": "^3.3.0",
     "typescript": "^2.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^9.4.6"
   }
 }
