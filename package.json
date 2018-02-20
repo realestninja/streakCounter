@@ -1,0 +1,17 @@
+{
+  "name": "boilerplate",
+  "version": "0.0.0",
+  "description": "basic",
+  "main": "main.ts",
+  "scripts": {
+    "start": "ts-node main.ts"
+  },
+  "author": "nikhil",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "node-telegram-bot-api": "~0.23.3",
+    "process": "^0.11.10",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.5.2"
+  }
+}
