@@ -23,9 +23,26 @@ bot.on('message', json => {
 const handleRequest = (chatID, message) => {
 	const storageLocation = getStorageLocation(chatID);
 
-	createFileIfNecessary(storageLocation);
+	const messageArguments = message.split(/[ ,]+/);
+	const request = messageArguments[0];
+	
+	if (messageArguments.length > 1) {
+		const additionalParam = messageArguments[1];
+		console.log(request);
+		console.log(additionalParam);
+	}
 
-	updateDate(storageLocation);
+	switch(request) {
+		case '/reset':
+		case '/start': 
+			createFileIfNecessary(storageLocation);
+			updateDate(storageLocation);
+			console.log('counter for' + chatID + ' has been updated')
+			break;
+		
+		default:
+			console.log('not a valid input');
+	}
 };
 
 const updateDate = storageLocation => {
