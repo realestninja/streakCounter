@@ -26,18 +26,27 @@ const handleRequest = (chatID, message) => {
 	const messageArguments = message.split(/[ ,]+/);
 	const request = messageArguments[0];
 	
-	if (messageArguments.length > 1) {
-		const additionalParam = messageArguments[1];
-		console.log(request);
-		console.log(additionalParam);
-	}
 
 	switch(request) {
 		case '/reset':
 		case '/start': 
 			createFileIfNecessary(storageLocation);
-			updateDate(storageLocation);
-			console.log('counter for' + chatID + ' has been updated')
+
+			if (messageArguments.length > 1) {
+				const additionalParam = messageArguments[1];
+				// validieren
+				updateDate(storageLocation, additionalParam);
+			} else {
+				updateDate(storageLocation);
+			}
+
+			console.log('counter for ' + chatID + ' has been updated')
+			break;
+
+		case '/streak':
+			//to do: insert streak
+			const streak = getStreak(storageLocation);
+			console.log('current streak in days: ' + streak);
 			break;
 		
 		default:
@@ -45,9 +54,29 @@ const handleRequest = (chatID, message) => {
 	}
 };
 
-const updateDate = storageLocation => {
+const getStreak = storageLocation => {
+	const userData = readFromFile(storageLocation);
+	const startTime = userData.startDate;
 	const currentTime = getTimeStampInSeconds();
 
+	const streak = getTimeDifferenceInDays(startTime, currentTime);
+	return streak;
+}
+
+const getTimeDifferenceInDays = (start, end) => {
+	let difference = end - start;
+
+	//from seconds to floored days
+	difference = Math.floor(difference / 60 / 60 / 24);
+
+	return difference;
+}
+
+
+const updateDate = ( storageLocation, daysPast = 0 ) => {
+	const currentTime = getTimeStampInSeconds();
+
+	console.log(daysPast);
 	const userData = readFromFile(storageLocation);
 	const userDataWithNewDate = setDate(userData, currentTime);
 	writeToFile(storageLocation, userDataWithNewDate);
