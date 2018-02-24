@@ -1,11 +1,21 @@
 import * as TelegramBot from 'node-telegram-bot-api';
 import * as process from 'process';
-import * as jsonfile from 'jsonfile';
 import * as dateTime from 'node-datetime';
+
+import { 
+	writeToFile, 
+	readFromFile,
+	checkIfStorageExists
+	} from './src/helper/filesystemOperations';
+
+import { 
+	getTimeStampInSeconds,
+	setDate,
+	updateDate
+	} from './src/helper/timeCalculationOperations';
 
 import { token, storageFolder } from './settings';
 
-const fs = require('fs');
 const bot = new TelegramBot(token, { polling: true });
 
 console.log('bot running - pid: ' +  process.pid);
@@ -25,6 +35,7 @@ const handleRequest = (chatID, message) => {
 
 	const messageArguments = message.split(/[ ,]+/);
 	const request = messageArguments[0];
+	let reply = '';
 	
 
 	switch(request) {
@@ -40,13 +51,15 @@ const handleRequest = (chatID, message) => {
 				updateDate(storageLocation);
 			}
 
-			console.log('counter for ' + chatID + ' has been updated')
+			//console.log('counter for ' + chatID + ' has been updated');
+			reply = "Your Counter has been set to 0 days";
+			bot.sendMessage(chatID, reply);
 			break;
 
 		case '/streak':
-			//to do: insert streak
 			const streak = getStreak(storageLocation);
-			console.log('current streak in days: ' + streak);
+			reply = 'Your current streak in days: ' + streak;
+			bot.sendMessage(chatID, reply);
 			break;
 		
 		default:
@@ -72,21 +85,6 @@ const getTimeDifferenceInDays = (start, end) => {
 	return difference;
 }
 
-
-const updateDate = ( storageLocation, daysPast = 0 ) => {
-	const currentTime = getTimeStampInSeconds();
-
-	console.log(daysPast);
-	const userData = readFromFile(storageLocation);
-	const userDataWithNewDate = setDate(userData, currentTime);
-	writeToFile(storageLocation, userDataWithNewDate);
-};
-
-const setDate = ( userData, currentTime ) => ({
-	...userData,
-	startDate: currentTime
-});
-
 const createFileIfNecessary = storageLocation => !checkIfStorageExists(storageLocation) && 
 	createEmptyStorage(storageLocation);
 
@@ -98,16 +96,4 @@ const createStructure = () =>
 
 const getStorageLocation = chatID => 
 	storageFolder + "/" + chatID + '.json';
-
-const getTimeStampInSeconds = () =>
- parseInt(((+new Date()) / 1000).toFixed(0));
-
-const checkIfStorageExists = storageLocation => 
-	fs.existsSync(storageLocation);
-
-const writeToFile = (storageLocation, data) => 
-	jsonfile.writeFileSync(storageLocation, data);
-
-const readFromFile = storageLocation =>
-	jsonfile.readFileSync(storageLocation);
 
