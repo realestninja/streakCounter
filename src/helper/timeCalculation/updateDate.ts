@@ -1,15 +1,7 @@
-import { 
-	writeToFile,
-	readFromFile
-} from './filesystemOperations';
-
-export const getTimeStampInSeconds = () =>
- parseInt(((+new Date()) / 1000).toFixed(0));
-
-export const setDate = ( userData, currentTime ) => ({
-	...userData,
-	startDate: currentTime
-});
+import { writeToFile } from '../filesystem/writeToFile';
+import { readFromFile } from '../filesystem/readFromFile';
+import { getTimeStampInSeconds } from './getTimeStampInSeconds';
+import { setDate } from './setDate';
 
 export const updateDate = ( storageLocation, daysPast = 0 ) => {
 	const currentTime = getTimeStampInSeconds();
