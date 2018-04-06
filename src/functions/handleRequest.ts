@@ -11,7 +11,6 @@ export const handleRequest = (bot, chatID, message, storageFolder) => {
 	const request = messageArguments[0];
 	let reply = '';
 	
-
 	switch(request) {
 		case '/reset':
 		case '/start': 
@@ -25,7 +24,6 @@ export const handleRequest = (bot, chatID, message, storageFolder) => {
 				updateDate(storageLocation);
 			}
 
-			//console.log('counter for ' + chatID + ' has been updated');
 			reply = "Your Counter has been set to 0 days";
 			bot.sendMessage(chatID, reply);
 			break;
